@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Add Product</h1>
+</header>
+
+<main class="card">
+
+    <form id="createProductForm">
+        <label>Name</label>
+        <input type="text" name="name" required>
+
+        <label>Description</label>
+        <input type="text" name="description" required>
+
+        <label>Price</label>
+        <input type="number" name="price" required>
+
+        <label>Cost Price</label>
+        <input type="number" name="costPrice" required>
+
+        <label>Image URL</label>
+        <input type="text" name="imagePath" required>
+
+        <label>Category ID</label>
+        <input type="number" name="categoryId" required>
+
+        <button class="primary-btn" type="submit">Create</button>
+    </form>
+
+    <a href="index.html"><button class="secondary-btn">Back</button></a>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
