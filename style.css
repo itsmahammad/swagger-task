@@ -214,17 +214,84 @@ input::placeholder {
     gap: 20px;
 }
 
-/* Strict width for Actions Column */
-table th:last-child,
-table td:last-child {
-    width: 180px;
+/* Use fixed layout so column widths don't change with content */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* IMPORTANT */
+}
+
+/* Define column widths explicitly (adjust px/% as needed) */
+table colgroup col {
+    /* default styles stay; widths below override per-col */
+}
+
+/* If you prefer percent: adjust these values */
+table col.id-col      { width: 60px;  }
+table col.name-col    { width: 140px; }
+table col.surname-col { width: 140px; }
+table col.father-col  { width: 160px; }
+table col.photo-col   { width: 120px; } /* fits 100x100 image + padding */
+table col.age-col     { width: 80px;  }
+table col.grade-col   { width: 120px; }
+table col.bio-col     { width: auto;   } /* takes remaining space */
+table col.actions-col { width: 180px; }  /* fixed for buttons */
+
+/* Ensure header text and cells behave */
+table th, table td {
+    padding: 14px 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* prevents cells from wrapping; remove if you want multi-line */
+    vertical-align: middle;
+}
+
+/* Make bio allow multi-line if you prefer (replace the above white-space rule) */
+/*
+table td.bio {
+    white-space: normal;
+    overflow: hidden;
+    max-height: 70px;
+}
+*/
+
+/* Center the photo vertically and horizontally inside its cell */
+td.photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Constrain image size cleanly */
+td.photo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Action buttons wrapper */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ensure the actions cell doesn't allow long bio to push it */
+td.actions {
     text-align: center;
 }
 
-/* Equal row height */
-table tr {
-    height: 120px;
+/* Long bio truncation */
+td.bio {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-table td, table th {
-    vertical-align: middle;
+
+/* Keep rows uniform height */
+table tbody tr {
+    height: 82px; /* choose value that fits 100px image (or reduce image) */
 }
