@@ -1,202 +1,184 @@
 
-const BASE_URL = "http://gadimovsabir-001-site9.mtempurl.com/api/Products";
-
+const BASE_URL = "http://gadimovsabir-001-site9.mtempurl.com/api/Students";
 
 document.addEventListener("DOMContentLoaded", () => {
-    if (document.querySelector("tbody")) {
-        // index.html → show product list
-        getData();
-    } else if (document.getElementById("createProductForm")) {
-        // add.html → handle create form
-        handleAddForm();
-    } else if (document.getElementById("editProductForm")) {
-        // edit.html → handle edit form
-        handleEditForm();
-    }
+    if (document.querySelector("tbody")) getData();
+    else if (document.getElementById("createProductForm")) handleAddForm();
+    else if (document.getElementById("editProductForm")) handleEditForm();
 });
 
-// ---------------------- INDEX.HTML ----------------------
-async function getData() {
-    try {
-        const response = await fetch(BASE_URL);
-        if (!response.ok) throw new Error(`Response status: ${response.status}`);
 
-        const result = await response.json();
-
-        const tbody = document.querySelector("tbody");
-        tbody.innerHTML = "";
-
-        result.forEach(product => {
-            const tr = document.createElement("tr");
-
-            const idTd = document.createElement("td");
-            idTd.textContent = product.id;
-
-            const nameTd = document.createElement("td");
-            nameTd.textContent = product.name;
-
-            const descriptionTd = document.createElement("td");
-            descriptionTd.textContent = product.description;
-
-            const priceTd = document.createElement("td");
-            priceTd.textContent = product.price;
-
-            const costPriceTd = document.createElement("td");
-            costPriceTd.textContent = product.costPrice;
-
-            const imageTd = document.createElement("td");
-            imageTd.textContent = product.imagePath;
-
-            const categoryIdTd = document.createElement("td");
-            categoryIdTd.textContent = product.categoryId;
-
-            // Edit button
-            const editTd = document.createElement("td");
-            const editBtn = document.createElement("button");
-            editBtn.textContent = "Edit";
-            editBtn.addEventListener("click", () => {
-                window.location.href = `edit.html?id=${product.id}`;
-            });
-            editTd.appendChild(editBtn);
-
-            // Delete button
-            const deleteTd = document.createElement("td");
-            const deleteBtn = document.createElement("button");
-            deleteBtn.textContent = "Delete";
-            deleteBtn.addEventListener("click", () => deleteProduct(product.id));
-            deleteTd.appendChild(deleteBtn);
-
-            tr.appendChild(idTd);
-            tr.appendChild(nameTd);
-            tr.appendChild(descriptionTd);
-            tr.appendChild(priceTd);
-            tr.appendChild(costPriceTd);
-            tr.appendChild(imageTd);
-            tr.appendChild(categoryIdTd);
-            tr.appendChild(editTd);
-            tr.appendChild(deleteTd);
-
-            tbody.appendChild(tr);
-        });
-
-    } catch (error) {
-        console.error("Error fetching products:", error.message);
-    }
-}
-
-// Delete a product
-async function deleteProduct(id) {
-    const confirmed = confirm("Are you sure you want to delete this product?");
-    if (!confirmed) return;
-
-    try {
-        const response = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
-        if (!response.ok) throw new Error(`Delete failed: ${response.status}`);
-
-        alert("Product deleted successfully!");
-        getData();
-    } catch (error) {
-        console.error("Error deleting product:", error.message);
-    }
-}
-
-// ---------------------- ADD.HTML ----------------------
-function handleAddForm() {
-    const form = document.getElementById("createProductForm");
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        // Collect form data
-        const formData = Object.fromEntries(new FormData(form).entries());
-
-        // Convert numeric fields
-        formData.price = Number(formData.price);
-        formData.costPrice = Number(formData.costPrice);
-        formData.categoryId = Number(formData.categoryId);
-
-        // Simple client-side validation
-        if (!formData.name || !formData.description || !formData.imagePath) {
-            alert("Please fill all required fields!");
-            return;
-        }
-        if (isNaN(formData.price) || isNaN(formData.costPrice) || isNaN(formData.categoryId)) {
-            alert("Price, Cost Price, and Category ID must be valid numbers!");
-            return;
-        }
-
-        try {
-            // Send POST request
-            const response = await fetch(BASE_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            });
-
-            // Log full response body for debugging
-            const resText = await response.text();
-            console.log("Server response:", resText);
-
-            if (!response.ok) {
-                alert(`Failed to add product. Status: ${response.status}\nCheck console for details.`);
-                throw new Error(`Failed to add product: ${response.status}`);
-            }
-
-            alert("Product added successfully!");
-            window.location.href = "index.html";
-
-        } catch (error) {
-            console.error("POST error:", error);
-            alert("Failed to add product. Check console.");
-        }
-    });
-}
-
-// ---------------------- EDIT.HTML ----------------------
-function handleEditForm() {
-    const form = document.getElementById("editProductForm");
-
-    // Get product ID from URL
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
-
-    // Load product data into form
-    fetch(`${BASE_URL}/${productId}`)
+function getData() {
+    fetch(BASE_URL)
         .then(res => res.json())
-        .then(product => {
-            form.elements.name.value = product.name;
-            form.elements.description.value = product.description;
-            form.elements.price.value = product.price;
-            form.elements.costPrice.value = product.costPrice;
-            form.elements.imagePath.value = product.imagePath;
-            form.elements.categoryId.value = product.categoryId;
-        })
-        .catch(err => console.error("Error fetching product:", err));
-
-    // Handle form submit
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const formData = Object.fromEntries(new FormData(form).entries());
-        formData.price = Number(formData.price);
-        formData.costPrice = Number(formData.costPrice);
-        formData.categoryId = Number(formData.categoryId);
-
-        try {
-            const response = await fetch(`${BASE_URL}/${productId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
+        .then(students => {
+            const tbody = document.querySelector("tbody");
+            tbody.innerHTML = "";
+            students.forEach(student => {
+                tbody.appendChild(createStudentRow(student));
             });
+        })
+        .catch(err => showErrorModal("Error", "Failed to load students"));
+}
 
-            if (!response.ok) throw new Error(`Failed to update product: ${response.status}`);
+function createStudentRow(student) {
+    const tr = document.createElement("tr");
+    const fields = ["id", "name", "surname", "fatherName", "age", "grade", "bio"];
 
-            alert("Product updated successfully!");
-            window.location.href = "index.html";
-
-        } catch (error) {
-            console.error(error.message);
-            alert("Failed to update product. Check console.");
-        }
+    fields.forEach(field => {
+        const td = document.createElement("td");
+        td.textContent = student[field];
+        tr.appendChild(td);
     });
+
+    // --- Profile Photo ---
+    const photoCellIndex = 4;
+    const photoCell = tr.children[photoCellIndex];
+    const img = document.createElement("img");
+    img.src = student.profilePhoto;
+    img.alt = "Profile";
+    img.style.cssText = "width: 100px; height: 100px; border-radius: 8px; object-fit: cover;";
+    photoCell.innerHTML = "";
+    photoCell.appendChild(img);
+
+    // --- Actions Column ---
+    const actionTd = document.createElement("td");
+
+    const actionWrapper = document.createElement("div");
+    actionWrapper.className = "action-buttons";  // <<--- IMPORTANT
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.className = "btn-edit";
+    editBtn.onclick = () => window.location.href = `edit.html?id=${student.id}`;
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
+    deleteBtn.className = "btn-delete";
+    deleteBtn.onclick = () => confirmDelete(student.id);
+
+    actionWrapper.appendChild(editBtn);
+    actionWrapper.appendChild(deleteBtn);
+    actionTd.appendChild(actionWrapper);
+
+    tr.appendChild(actionTd);
+
+    return tr;
+}
+
+
+
+function confirmDelete(id) {
+    showModal("Delete Student", "Are you sure you want to delete this student?", () => {
+        fetch(`${BASE_URL}/${id}`, { method: "DELETE" })
+            .then(res => res.ok ? showSuccessModal("Success", "Student deleted!", getData) : Promise.reject("Delete failed"))
+            .catch(err => showErrorModal("Error", "Failed to delete student"));
+    });
+}
+
+
+function handleAddForm() {
+    document.getElementById("createProductForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target).entries());
+        formData.age = Number(formData.age);
+        formData.grade = Number(formData.grade);
+
+        const error = validateStudentData(formData);
+        if (error) {
+            showErrorModal("Validation Error", error);
+            return;
+        }
+
+        fetch(BASE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        })
+            .then(res => res.ok ? showSuccessModal("Success", "Student added!", () => window.location.href = "index.html") : Promise.reject("Add failed"))
+            .catch(err => showErrorModal("Error", "Failed to add student"));
+    });
+}
+
+
+function handleEditForm() {
+    const params = new URLSearchParams(window.location.search);
+    const studentId = params.get("id");
+
+    fetch(`${BASE_URL}/${studentId}`)
+        .then(res => res.json())
+        .then(student => {
+            const form = document.getElementById("editProductForm");
+            form.name.value = student.name;
+            form.surname.value = student.surname;
+            form.fatherName.value = student.fatherName;
+            form.profilePhoto.value = student.profilePhoto;
+            form.age.value = student.age;
+            form.grade.value = student.grade;
+            form.bio.value = student.bio;
+        })
+        .catch(err => showErrorModal("Error", "Failed to load student"));
+
+    document.getElementById("editProductForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target).entries());
+        formData.age = Number(formData.age);
+        formData.grade = Number(formData.grade);
+
+        const error = validateStudentData(formData);
+        if (error) {
+            showErrorModal("Validation Error", error);
+            return;
+        }
+
+        fetch(`${BASE_URL}/${studentId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        })
+            .then(res => res.ok ? showSuccessModal("Success", "Student updated!", () => window.location.href = "index.html") : Promise.reject("Update failed"))
+            .catch(err => showErrorModal("Error", "Failed to update student"));
+    });
+}
+
+
+function validateStudentData(data) {
+    const fields = { name: data.name, surname: data.surname, fatherName: data.fatherName };
+    const nameRegex = /^[a-zA-Z]+$/;
+
+    for (let [key, value] of Object.entries(fields)) {
+        if (!value || value.trim() === "") return `${key.charAt(0).toUpperCase() + key.slice(1)} cannot be empty!`;
+        if (!nameRegex.test(value.trim())) return `${key} can only contain letters!`;
+        if (value.trim().length < 2) return `${key} must be at least 2 characters!`;
+        if (value.trim().length > 50) return `${key} cannot exceed 50 characters!`;
+    }
+
+    if (!data.profilePhoto || data.profilePhoto.trim() === "") return "Profile Photo cannot be empty!";
+    if (!data.bio || data.bio.trim() === "") return "Bio cannot be empty!";
+
+    const age = parseInt(data.age);
+    if (isNaN(age) || age < 1 || age > 120) return "Age must be between 1 and 120!";
+
+    const grade = parseInt(data.grade);
+    if (isNaN(grade) || grade < 1 || grade > 100) return "Grade must be between 1 and 100!";
+
+    return null;
+}
+
+
+function showModal(title, message, onConfirm) {
+    Swal.fire({
+        title, text: message, icon: 'warning', showCancelButton: true,
+        confirmButtonColor: '#2196f3', cancelButtonColor: '#424242',
+        confirmButtonText: 'Confirm', cancelButtonText: 'Cancel'
+    }).then(result => result.isConfirmed && onConfirm());
+}
+
+function showSuccessModal(title, message, onClose) {
+    Swal.fire({ title, text: message, icon: 'success', confirmButtonColor: '#4caf50', confirmButtonText: 'OK' })
+        .then(() => onClose && onClose());
+}
+
+function showErrorModal(title, message) {
+    Swal.fire({ title, text: message, icon: 'error', confirmButtonColor: '#f44336', confirmButtonText: 'OK' });
 }
