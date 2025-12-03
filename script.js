@@ -24,16 +24,14 @@ function getData() {
 function createStudentRow(student) {
     const tr = document.createElement("tr");
 
-    // Fields to display in order (matches your table header)
     const fields = ["id", "name", "surname", "fatherName", "profilePhoto", "age", "grade", "bio"];
 
     fields.forEach(field => {
         const td = document.createElement("td");
 
-        // If this is the Profile Photo column
         if (field === "profilePhoto") {
             const img = document.createElement("img");
-            img.src = student.profilePhoto || "https://via.placeholder.com/100"; // fallback image
+            img.src = student.profilePhoto || "https://via.placeholder.com/100";
             img.alt = "Profile";
             img.style.cssText = "width: 100px; height: 100px; border-radius: 8px; object-fit: cover;";
             td.appendChild(img);
@@ -44,10 +42,9 @@ function createStudentRow(student) {
         tr.appendChild(td);
     });
 
-    // Actions column
     const actionTd = document.createElement("td");
     const actionWrapper = document.createElement("div");
-    actionWrapper.className = "action-buttons"; // keeps buttons in a row
+    actionWrapper.className = "action-buttons";
 
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";

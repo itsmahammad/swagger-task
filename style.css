@@ -1,11 +1,11 @@
-/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
 }
@@ -16,7 +16,7 @@ body {
     color: #e2e8f0;
 }
 
-/* HEADER */
+
 header {
     background: #161b22;
     border-bottom: 1px solid #2d333b;
@@ -32,14 +32,14 @@ header h1 {
     color: #f0f3f7;
 }
 
-/* MAIN */
+
 main {
     max-width: 1500px;
     margin: 0 auto;
     padding: 32px;
 }
 
-/* CARD */
+
 .card {
     background: #161b22;
     border: 1px solid #2d333b;
@@ -63,7 +63,7 @@ main {
     color: #f0f3f7;
 }
 
-/* TABLE */
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -94,7 +94,7 @@ table tbody tr:hover {
     background: #1f242d;
 }
 
-/* BUTTONS */
+
 button {
     padding: 10px 16px;
     border: none;
@@ -109,11 +109,11 @@ button {
     transition: 0.15s ease;
 }
 
-/* BUTTON TYPES */
 .primary-btn {
     background: #2563eb;
     color: white;
 }
+
 .primary-btn:hover {
     background: #1e4ecb;
 }
@@ -123,15 +123,17 @@ button {
     color: #e5e7eb;
     border: 1px solid #2d333b;
 }
+
 .secondary-btn:hover {
     background: #222831;
 }
 
-/* ACTION BUTTONS */
+
 .btn-add {
     background: #2563eb;
     color: white;
 }
+
 .btn-add:hover {
     background: #1e4ecb;
 }
@@ -140,6 +142,7 @@ button {
     background: #dc2626;
     color: white;
 }
+
 .btn-delete:hover {
     background: #b91c1c;
 }
@@ -148,11 +151,12 @@ button {
     background: #d97706;
     color: white;
 }
+
 .btn-edit:hover {
     background: #b45309;
 }
 
-/* FORM */
+
 form {
     display: grid;
     grid-template-columns: 1fr;
@@ -190,7 +194,7 @@ input::placeholder {
     color: #6b7280;
 }
 
-/* SCROLLBAR */
+
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -207,6 +211,7 @@ input::placeholder {
 ::-webkit-scrollbar-thumb:hover {
     background: #3c444d;
 }
+
 /* Space between buttons */
 .action-buttons {
     display: flex;
@@ -214,55 +219,71 @@ input::placeholder {
     gap: 20px;
 }
 
-/* Use fixed layout so column widths don't change with content */
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* IMPORTANT */
+    table-layout: fixed;
+    /* IMPORTANT */
 }
 
-/* Define column widths explicitly (adjust px/% as needed) */
-table colgroup col {
-    /* default styles stay; widths below override per-col */
+
+
+
+
+table col.id-col {
+    width: 60px;
 }
 
-/* If you prefer percent: adjust these values */
-table col.id-col      { width: 60px;  }
-table col.name-col    { width: 140px; }
-table col.surname-col { width: 140px; }
-table col.father-col  { width: 160px; }
-table col.photo-col   { width: 120px; } /* fits 100x100 image + padding */
-table col.age-col     { width: 80px;  }
-table col.grade-col   { width: 120px; }
-table col.bio-col     { width: auto;   } /* takes remaining space */
-table col.actions-col { width: 180px; }  /* fixed for buttons */
+table col.name-col {
+    width: 140px;
+}
 
-/* Ensure header text and cells behave */
-table th, table td {
+table col.surname-col {
+    width: 140px;
+}
+
+table col.father-col {
+    width: 160px;
+}
+
+table col.photo-col {
+    width: 120px;
+}
+
+table col.age-col {
+    width: 80px;
+}
+
+table col.grade-col {
+    width: 120px;
+}
+
+table col.bio-col {
+    width: auto;
+}
+
+table col.actions-col {
+    width: 180px;
+}
+
+
+table th,
+table td {
     padding: 14px 16px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap; /* prevents cells from wrapping; remove if you want multi-line */
+    white-space: nowrap;
     vertical-align: middle;
 }
 
-/* Make bio allow multi-line if you prefer (replace the above white-space rule) */
-/*
-table td.bio {
-    white-space: normal;
-    overflow: hidden;
-    max-height: 70px;
-}
-*/
 
-/* Center the photo vertically and horizontally inside its cell */
 td.photo {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* Constrain image size cleanly */
+
 td.photo img {
     width: 100px;
     height: 100px;
@@ -271,7 +292,7 @@ td.photo img {
     display: block;
 }
 
-/* Action buttons wrapper */
+
 .action-buttons {
     display: flex;
     gap: 10px;
@@ -279,19 +300,19 @@ td.photo img {
     align-items: center;
 }
 
-/* ensure the actions cell doesn't allow long bio to push it */
+
 td.actions {
     text-align: center;
 }
 
-/* Long bio truncation */
+
 td.bio {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Keep rows uniform height */
+
 table tbody tr {
-    height: 82px; /* choose value that fits 100px image (or reduce image) */
+    height: 82px;
 }
